@@ -1,0 +1,243 @@
+:root {
+	--text-primary: #f0f0f0;
+
+	/* Accent colors */
+	--color-light-green: #42ea6d;
+	--color-light-green2: #42ea6c75;
+
+	--color-dim-green: #4caf50;
+	--color-green: #075d44;
+	--color-raspberry: #fb006d;
+	--color-pink: #ffc5f0;
+	--color-purple: #7f24dd;
+	--color-light-red: #fc7272;
+	--color-light-orange: #fdd835;
+	--color-blue: #03a9f4;
+
+	/* BG colors */
+	--color-blackboard: #191819;
+	--color-dim-black: #2a2a2a;
+	--color-midnight: #161920;
+	--glass-bg: rgba(255, 255, 255, 0);
+	--glass-border: rgba(255, 255, 255, 0.18);
+	/* Other */
+}
+
+/* Основной контейнер календаря */
+.react-calendar {
+	width: 100%;
+	height: 100%;
+	min-height: 200px; /* Минимальная высота */
+	background: var(--glass-bg);
+	backdrop-filter: blur(12px);
+	border: 1px solid var(--glass-border);
+	border-radius: 16px;
+	padding: 16px;
+	color: var(--text-primary);
+	font-family: 'Inter', sans-serif;
+	display: flex;
+	flex-direction: column;
+
+	padding: max(16px, env(safe-area-inset-top))
+		max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom))
+		max(16px, env(safe-area-inset-left));
+}
+
+/* Контейнер навигации */
+.react-calendar__navigation {
+	height: 40px;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 30px;
+	flex-shrink: 0; /* Чтобы не сжимался */
+	backdrop-filter: blur(20px);
+}
+
+.react-calendar__navigation__arrow {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 100%;
+	border-radius: 12px;
+	cursor: pointer;
+	transition: 0.3s ease;
+}
+
+.react-calendar__navigation__next-button {
+	margin-right: 5px;
+}
+.react-calendar__navigation__prev-button {
+	margin-left: 5px;
+}
+
+.react-calendar__navigation__arrow:hover {
+	background-color: var(--color-blue);
+}
+
+/* Контейнер вида (месяц, год и т.д.) */
+.react-calendar__viewContainer {
+	flex-grow: 1; /* Занимает все доступное пространство */
+	display: flex;
+	flex-direction: column;
+}
+
+/* Контейнер месяца */
+.react-calendar__month-view {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+/* Контейнер дней недели */
+.react-calendar__month-view__weekdays {
+	margin-bottom: 10px;
+	flex-shrink: 0;
+	border-bottom: 1px dotted var(--glass-border);
+}
+
+.react-calendar__month-view__weekdays__weekday {
+	display: flex;
+	justify-content: center;
+}
+
+.react-calendar__month-view__weekdays__weekday > * {
+	text-decoration: none;
+}
+
+/* Сетка дней */
+.react-calendar__month-view__days {
+	height: 80vh;
+	flex-grow: 1;
+	display: grid !important;
+	grid-template-columns: repeat(7, 1fr);
+	grid-auto-rows: 1fr;
+	gap: 8px;
+
+	height: calc(100vh - 180px - env(safe-area-inset-bottom));
+}
+
+/* Отдельные ячейки дней */
+.react-calendar__tile {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	border: 1px solid transparent;
+	border-radius: 8px;
+	transition: all 0.3s ease;
+	min-height: 0;
+	min-height: 44px;
+	touch-action: manipulation;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.react-calendar__tile:active {
+	transform: scale(0.95);
+	transition: transform 0.1s ease;
+}
+
+.react-calendar__tile:not(
+		.react-calendar__month-view__days__day--neighboringMonth
+	) {
+	border: 1px dotted var(--glass-border);
+}
+
+.react-calendar__tile:hover {
+	background: rgba(255, 147, 130, 0.2);
+}
+
+.completed-day {
+	background: var(--color-light-green2);
+	position: relative;
+	transition: all 0.3s ease;
+	animation: pulse 0.5s; /* Микроанимация при отметке */
+}
+
+.react-calendar__month-view__days__day--neighboringMonth {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+@keyframes pulse {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.05);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+@media (hover: none) {
+	.react-calendar__tile:hover {
+		background: transparent !important;
+	}
+
+	.react-calendar__navigation__arrow:hover {
+		background: transparent !important;
+	}
+}
+
+@supports (padding: max(0px)) {
+	.react-calendar {
+		padding-top: max(16px, env(safe-area-inset-top));
+	}
+}
+
+@media (max-width: 768px) {
+	.react-calendar {
+		padding: max(12px, env(safe-area-inset-top))
+			max(8px, env(safe-area-inset-right))
+			max(12px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
+	}
+
+	.react-calendar__month-view__days {
+		height: calc(100vh - 250px - env(safe-area-inset-bottom));
+		gap: 4px;
+	}
+
+	.react-calendar__tile {
+		min-height: 36px;
+		font-size: 0.9em;
+	}
+
+	.react-calendar__navigation {
+		height: 36px;
+		margin-bottom: 20px;
+	}
+
+	.react-calendar__navigation__arrow {
+		width: 36px;
+	}
+
+	.completed-day::after {
+		transform: scale(0.8);
+		top: 2px;
+		right: 2px;
+	}
+}
+
+@media only screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) {
+	.react-calendar__month-view__days {
+		height: calc(100vh - 140px - env(safe-area-inset-bottom));
+	}
+
+	.react-calendar__tile {
+		min-height: 34px;
+	}
+}
+
+@media (orientation: portrait) {
+	.react-calendar__month-view__days {
+		grid-auto-rows: minmax(40px, 1fr);
+	}
+}
+
+@media (orientation: landscape) {
+	.react-calendar__month-view__days {
+		grid-auto-rows: minmax(30px, 1fr);
+	}
+}
